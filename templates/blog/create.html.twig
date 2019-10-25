@@ -1,0 +1,59 @@
+{% extends "base.html.twig" %}
+
+{% form_theme formArticle with [
+    'bootstrap_4_layout.html.twig',
+    '@FOSCKEditor/Form/ckeditor_widget.html.twig']
+%}
+
+{% block title %}
+    {% if editMode %}
+        Modifier un article
+    {% else %}
+        Créer un article
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+
+    {% if editMode %}
+        <h1>Modification d'un article</h1>
+    {% else %}
+        <h1>Creation d'un article</h1>
+    {% endif %}
+    
+    {{ form_start(formArticle) }}
+    <div class="row">
+        <div class="col-5">
+            {{ form_row(formArticle.title, {'label': 'Titre de l\'article (ex : Day 1)', 'attr' : {'placeholder': "Titre de l'article"}}) }}
+        </div>
+        <div class="col-6">
+            {{ form_row(formArticle.tagline, {'label': 'Accroche de l\'article (max 50 caractères)', 'attr' : {'placeholder': "Accroche de l'article"}}) }}
+        </div>
+        <div class="col-12">
+            {{ form_row(formArticle.content, {'label': 'Contenu de l\'article', 'attr' : {'placeholder': "Contenu de l'article"}}) }}
+        </div>
+        <div class="col-5">
+            {{ form_row(formArticle.day, {'label': 'Jour (ex : Lundi 21 Octobre)', 'attr' : {'placeholder': "Jour"}}) }}
+            {{ form_row(formArticle.done, {'label': 'Validation (0 : non validé, 1 : validé)', 'attr' : {'placeholder': "Fini ?"}}) }}
+        </div>
+        <div class="col-5">
+            {{ form_row(formArticle.brochure, {'label': 'Image illustrant l\'article', 'attr' : {'placeholder': "URL de la photo"}}) }}
+            <img src="{{asset('uploads/brochures/' ~ articlePhoto)}}" alt=" " height="150" width="300">
+            {% if articlePhoto|length > 0 %}
+                (Photo existante : {{ articlePhoto }})
+            {% endif %}
+        </div>
+            
+        
+    </div>
+
+    <button type="submit" class="btn btn-light">
+        {% if editMode %}
+            Enregistrer
+        {% else %}
+            Ajouter un article
+        {% endif %}
+    </button>
+    {{ form_end(formArticle) }}
+    <a href="{{ path('blog') }}" class="btn btn-outline-primary mt-5 h-50">Retour</a>
+{% endblock %}

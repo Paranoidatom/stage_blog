@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script src="/assets/index.js"></script>
+        <link rel="stylesheet" href="/assets/index.css">
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://bootswatch.com/4/cyborg/bootstrap.min.css">
+        <title>Blog - {% block title %}Bienvenue{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+        <script src="https://cdn.rawgit.com/nnattawat/flip/master/dist/jquery.flip.min.js">
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js">
+        <script>
+            function startFlip() {
+                $(".card-grid").flip('toggle');
+                $(".card-grid").flip();
+            }
+        </script>
+    </head>
+    <body style="{% if app.user %} background-color:rgb(40,40,40); {% else %} background-color:rgb(0,0,0); {% endif %}" onload="startFlip()">
+    <nav class="navbar navbar-expand-lg {% if app.user %} navbar-light bg-light {% else %} navbar-dark bg-dark {% endif %}">
+        <a class="navbar-brand" href="{{ path('home') }}">
+            <img src="https://cdn.filestackcontent.com/l0TGe3v6TEuuPruu9MUh" alt="" height="30">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item ">
+                    <a class="nav-link" href="{{ path('blog') }}">Articles <span class="sr-only">(current)</span></a>
+                </li>
+                
+                {% if app.user is not null %}
+                    {% for role in app.user.roles if role == 'ROLE_ADMIN' %}
+                        <li class="nav-item ">
+                            <a class="nav-link" href="{{ path('security_registration') }}">Inscrire un nouvel utilisateur<span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('blog_create') }}">Créer un article</a>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+
+            </ul>
+            <ul class="navbar-nav align-items-center">
+                {% if not app.user %}
+                    <li class="nav-item nav-inline">
+                        <a href="{{ path('security_login') }}" class="btn btn-danger">Connexion</a>
+                    </li>
+                {% else %}
+                    <span class="mr-3">Bonjour {{ app.user.username }}</span> 
+                    <a href="{{ path('security_logout') }}" class="btn btn-danger">Déconnexion</a>                    
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+            {% block body %}{% endblock %}
+    </div>
+        {% block javascripts %}
+            
+        {% endblock %}
+    </body>
+    
+    
+    
+</html>

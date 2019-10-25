@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <article>
+        <div class=" infos_article row mt-5">
+            <h1 class="titre_article col-8" >{{article.tagline}}</h1>
+            <a href="{{ asset('uploads/brochures/' ~ article.brochureFilename) }}" class="col-3">
+                <img src="{{asset('uploads/brochures/' ~ article.brochureFilename)}}" alt="Image illustrant l'article" height="150" width="300">
+            </a>
+        </div>
+        
+        <div class="mb-3" style="color: white; font-size: 25px;">
+            {{article.title}}
+        </div>
+
+        <div class="metadata">Ecrit le {{article.createdAt | date('d/m/Y')}} à {{article.createdAt | date('H/i')}}</div>
+
+        <hr style="background-color: white;">
+        <div class="mt-5 mb-5" style="color: white; font-size: 20px; text-align: justify;">
+            {{article.content | raw}}  
+        </div>
+        {% if app.user %}
+            <a href="{{ path('blog_edit', {'id': article.id}) }}" class="btn btn-outline-primary h-50">Modifier</a>
+        {% endif %}
+        <a href="{{ path('blog') }}" class="btn btn-outline-primary h-50">Retour</a>
+    </article>
+{% endblock %}
