@@ -22,6 +22,7 @@ class BlogController extends AbstractController
      */
     public function index(ArticleRepository $repo)
     {
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'User tried to access a page without having ROLE_ADMIN');
         $articles = $repo->findAll();
         return $this->render('blog/index.html.twig', [
             'controller_name' => 'BlogController',

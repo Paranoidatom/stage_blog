@@ -46,6 +46,11 @@ class User implements UserInterface
      */
     public $confirm_password;
 
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $role;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -87,13 +92,21 @@ class User implements UserInterface
         return $this;
     }
 
+    public function getRole(): ?string
+    {
+        return $this->role;
+    }
+
+    public function setRole(string $role): self
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
     public function getRoles() {
-        if($this->getEmail() === "bertrand_laine@hotmail.com") {
-            return ['ROLE_ADMIN'];
-        }
-        else {
-            return ['ROLE_USER'];
-        }
+        
+        return [$this->getRole()];
     }
 
     public function eraseCredentials() {}

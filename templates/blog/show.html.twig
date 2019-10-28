@@ -19,8 +19,10 @@
         <div class="mt-5 mb-5" style="color: white; font-size: 20px; text-align: justify;">
             {{article.content | raw}}  
         </div>
-        {% if app.user %}
-            <a href="{{ path('blog_edit', {'id': article.id}) }}" class="btn btn-outline-primary h-50">Modifier</a>
+        {% if app.user is not null %}
+            {% for role in app.user.roles if role == 'ROLE_ADMIN' %}
+                <a href="{{ path('blog_edit', {'id': article.id}) }}" class="btn btn-outline-primary h-50">Modifier</a>
+            {% endfor %}
         {% endif %}
         <a href="{{ path('blog') }}" class="btn btn-outline-primary h-50">Retour</a>
     </article>
