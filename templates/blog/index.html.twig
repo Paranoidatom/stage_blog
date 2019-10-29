@@ -9,13 +9,12 @@
 {% endblock %}
 
 {% block body %}
-    <!--<section class="articles mt-5" style="background: url(https://cdn.filestackcontent.com/l0TGe3v6TEuuPruu9MUh) no-repeat center; background-size: contain;">-->
     <div class="row">
         <div class="col-2"></div>
         <section class="articles mt-5">
             <div class="row">
                 {% for article in articles %}
-                    <div class="card-grid col-2 m-2">
+                    <div class="card-grid col-2 m-3">
                         <div class="front row align-items-end {% if article.done == 0 %} card_border_not_valid {% else %} card_border_valid {% endif %}">
                             <img src="{{asset('uploads/brochures/' ~ article.brochureFilename)}}" alt="" width="100%">
                             <div class="font-weight-bold" style="font-size: 18px; color: white;">{{article.day}}</div>
@@ -24,12 +23,11 @@
                             <div class="content" style="max-height: 80%;">
                                 <h5 class="font-weight-bold pt-2 titre_article ml-2 mr-2" style="background-color: white; color: black;">{{article.tagline}}</h5>
                             </div>
-                            
                             <div class="content row">
-                                <a href="{{ path('blog_show', {'id': article.id}) }}" class="{% if app.user is not null %}{% for role in app.user.roles if role == 'ROLE_ADMIN' %}col-6{% endfor %}{% else %}col-12{% endif %} btn btn-primary {% if article.done == 0 and app.user == NULL %}disabled{% endif %}">Lire</a>
+                                <a href="{{ path('blog_show', {'id': article.id}) }}" class="{% if app.user is not null %}{% for role in app.user.roles | filter(role => role == 'ROLE_ADMIN') %}col-6{% endfor %}{% for role in app.user.roles | filter(role => role == 'ROLE_USER') %}col-12{% endfor %}{% endif %} btn btn-primary {% if article.done == 0 %}{% for role in app.user.roles | filter(role => role == "ROLE_USER") %}disabled{% endfor %}{% endif %}">Lire</a>
                                 {% if app.user is not null %}
-                                    {% for role in app.user.roles if role == 'ROLE_ADMIN' %}
-                                        <a href="{{ path('blog_edit', {'id': article.id}) }}" class="col-6 btn btn-warning {% if article.done == 0 and app.user == NULL %}disabled{% endif %}">Modifier</a>
+                                    {% for role in app.user.roles | filter(role => role == 'ROLE_ADMIN') %}
+                                        <a href="{{ path('blog_edit', {'id': article.id}) }}" class="col-6 btn btn-warning">Modifier</a>
                                     {% endfor %}
                                 {% endif %}
                             </div>
