@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use Faker\Factory;
 use App\Entity\User;
+use App\Entity\Article;
 use App\Form\RegistrationType;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -25,9 +27,27 @@ class SecurityController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
+            $faker = \Faker\Factory::create('fr_FR');
             $hash = $encoder->encodePassword($user, $user->getPassword());
             $user->SetPassword($hash);
+            $user->SetRole("ROLE_USER");
             $manager->persist($user);
+            for($i=0;$i<91;$i++) {
+                $date = new \DateTime('2019-10-21');
+                $date2 = date_add($date, date_interval_create_from_date_string($i.' days'));
+                if($date2->format("l") != 'Saturday' && $date2->format("l") != 'Sunday') {
+                    $article = new Article();
+                    $article->setTitle($faker->sentence())
+                            ->setContent('<p>'.join($faker->paragraphs(5), '</p><p>').'</p>')
+                            ->setTagline($faker->sentence())
+                            ->setCreatedAt(new \DateTime())
+                            ->setBrochureFilename('smile_logo.png')
+                            ->setDone(0)
+                            ->setDate($date2)
+                            ->setAuthor($user);
+                    $manager->persist($article);
+                }
+            }
             $manager->flush();
 
             return $this->redirectToRoute('blog');

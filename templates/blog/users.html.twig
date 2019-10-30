@@ -1,0 +1,25 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Liste des utilisateurs{% endblock %}
+
+{% block body %}
+    
+    <div class="row">
+        {% for user in users %}
+            <div class="card-grid col-md-2 m-3">
+
+                <div class="front row align-items-end">
+                    <img src="/uploads/brochures/smile_logo.png" alt="" width="100%">
+                    <div class="font-weight-bold" style="font-size: 15px; color: white;">{{ user.username }}</div>
+                </div>
+
+                <div class="card_back back align-items-center card_border" style="background-color: white; color: black;">
+                    <div class="row justify-content-center align-items-center">
+                        <a href="{{ path('blog_user', {'id': user.id}) }}" class="col-12 row btn btn-primary align-items-center justify-content-center" style="font-size:16px; height: 96px; display: flex;"> <span>Son blog</span></a>
+                        <a href="#" class="col-12 btn btn-warning align-items-center justify-content-center" style="font-size:16px; height: 96px; display: flex;">Son profil</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

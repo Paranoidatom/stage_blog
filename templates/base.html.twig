@@ -4,14 +4,16 @@
         <meta charset="UTF-8">
         <title>Blog - {% block title %}Bienvenue{% endblock %}</title>
         <link rel="stylesheet" href="/assets/index.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://bootswatch.com/4/cyborg/bootstrap.min.css">
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        
         {% block stylesheets %}{% endblock %}
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-        <script src="/assets/index.js"></script>
-        <script src="https://cdn.rawgit.com/nnattawat/flip/master/dist/jquery.flip.min.js"></script>
         {% block javascripts %}{% endblock %}
     </head>
-    <body style="{% if app.user %} background-color:rgb(20,20,20); {% else %} background-color:rgb(0,0,0); {% endif %}" onload="startFlip()">
+    <body style="{% if app.user %} background-color:rgb(20,20,20); {% else %} background-color:rgb(0,0,0); {% endif %}">
+        
         <nav class="navbar fixed-top navbar-expand-lg {% if app.user %} navbar-white bg-white {% else %} navbar-dark bg-dark {% endif %}">
             <a class="navbar-brand" href="{{ path('home') }}">
                 <img src="https://cdn.filestackcontent.com/l0TGe3v6TEuuPruu9MUh" alt="" height="30">
@@ -21,38 +23,54 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarColor01">
                 <ul class="navbar-nav mr-auto">
-                    {% if app.user %}
+                    {% if app.user is null %}
                         <li class="nav-item ">
-                            <a class="nav-link" href="{{ path('blog') }}">Articles <span class="sr-only">(current)</span></a>
-                        </li>
-                    {% endif %}
-                    {% if app.user is not null %}
-                        {% for role in app.user.roles | filter(role => role == 'ROLE_ADMIN') -%}
-                            <li class="nav-item ">
-                                <a class="nav-link" href="{{ path('security_registration') }}">Inscrire un nouvel utilisateur<span class="sr-only">(current)</span></a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ path('blog_create') }}">Créer un article</a>
-                            </li>
-                        {% endfor %}
-                    {% endif %}
-                </ul>
-                <ul class="navbar-nav align-items-center">
-                    {% if not app.user %}
-                        <li class="nav-item nav-inline">
-                            <a href="{{ path('security_login') }}" class="btn btn-danger">Connexion</a>
+                            <a class="nav-link" href="{{ path('security_registration') }}">S'inscrire</a>
                         </li>
                     {% else %}
-                        <span class="mr-3">Bonjour {{ app.user.username }}</span> 
-                        <a href="{{ path('security_logout') }}" class="btn btn-danger">Déconnexion</a>                    
+                        <li class="nav-item ">
+                            <a class="nav-link" href="{{ path('blog') }}">Mon blog</a>
+                        </li>
                     {% endif %}
+                    <li class="nav-item ">
+                        <a class="nav-link" href="{{ path('users_list') }}">Membres</a>
+                    </li>
                 </ul>
+                    
+                {% if not app.user %}
+                    <ul class="navbar-nav align-items-center">
+                        <li class="nav-item nav-inline">
+                            <a href="{{ path('security_login') }}" class="btn btn-lg btn-danger">Connexion</a>
+                        </li>
+                    </ul>
+                {% else %}
+                    <ul class="navbar-nav align-items-center navbar-danger bg-danger rounded-circle">
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="accountDropdownLink" style="color:white;">{{ app.user.username|slice(0, 3)}}</a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="accountDropdownLink">
+                                <a class="dropdown-item" href="#">Modifier le profil</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{{ path('blog') }} ">Afficher blog</a>
+                                <a class="dropdown-item" href="{{ path('blog_create') }}">Créer un article</a>
+                                <div class="dropdown-divider"></div>
+                                <a href="{{ path('security_logout') }}" class="dropdown-item" href="#">Déconnexion</a>
+                            </div>
+                        </li>   
+                    </ul>              
+                {% endif %}
+                
             </div>
         </nav>
+        
         <div class="col-12" style="height: 100px;"></div>
         <div class="container">
             {% block body %}{% endblock %}
+            
             {{ include('blog/footer.html.twig') }}
         </div>
+        <script src="/assets/index.js"></script>
+        <script src="https://cdn.rawgit.com/nnattawat/flip/master/dist/jquery.flip.min.js"></script>
+        
     </body>
+    
 </html>

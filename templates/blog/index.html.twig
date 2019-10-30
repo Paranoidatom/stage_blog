@@ -9,26 +9,35 @@
 {% endblock %}
 
 {% block body %}
-    <div class="row">
-        <div class="col-2"></div>
-        <section class="articles mt-5">
+    <div class="container">
+        <section class="col-md-12 articles mt-5">
+            {% if user == app.user %}
+                <h2 class="col-12">Mon blog</strong></h2>
+            {% else %}
+                <h2 class="col-12">Blog de <strong>{{ user.username }}</strong></h2>
+            {% endif %}
             <div class="row">
                 {% for article in articles %}
-                    <div class="card-grid col-2 m-3">
+                    <div class="card-grid col-md-2 m-3">
                         <div class="front row align-items-end {% if article.done == 0 %} card_border_not_valid {% else %} card_border_valid {% endif %}">
                             <img src="{{asset('uploads/brochures/' ~ article.brochureFilename)}}" alt="" width="100%">
-                            <div class="font-weight-bold" style="font-size: 18px; color: white;">{{article.day}}</div>
+                            <div class="font-weight-bold" style="font-size: 15px; color: white;">{{article.date | localizeddate('full', 'none', 'fr', 'Europe/Paris', 'EEEE d MMMM')}}</div>
                         </div>
                         <div class="card_back back align-items-center card_border" style="background-color: white; color: black;">
                             <div class="content" style="max-height: 80%;">
                                 <h5 class="font-weight-bold pt-2 titre_article ml-2 mr-2" style="background-color: white; color: black;">{{article.tagline}}</h5>
                             </div>
                             <div class="content row">
-                                <a href="{{ path('blog_show', {'id': article.id}) }}" class="{% if app.user is not null %}{% for role in app.user.roles | filter(role => role == 'ROLE_ADMIN') %}col-6{% endfor %}{% for role in app.user.roles | filter(role => role == 'ROLE_USER') %}col-12{% endfor %}{% endif %} btn btn-primary {% if article.done == 0 %}{% for role in app.user.roles | filter(role => role == "ROLE_USER") %}disabled{% endfor %}{% endif %}">Lire</a>
-                                {% if app.user is not null %}
-                                    {% for role in app.user.roles | filter(role => role == 'ROLE_ADMIN') %}
-                                        <a href="{{ path('blog_edit', {'id': article.id}) }}" class="col-6 btn btn-warning">Modifier</a>
-                                    {% endfor %}
+                                <a href="{{ path('blog_show', {'id': article.id}) }}" class="{% if app.user and app.user == article.author %}col-4{% else %}col-12{% endif %} btn btn-primary {% if article.done == 0 %}{% for role in app.user.roles | filter(role => role == "ROLE_USER") %}disabled{% endfor %}{% endif %}">
+                                    <img src="/images/view.png" alt="" class="icons-small">
+                                </a>
+                                {% if app.user and app.user == article.author %}
+                                    <a href="{{ path('blog_edit', {'id': article.id}) }} " class="col-4 btn btn-warning">
+                                        <img src="/images/edit.png" alt="" class="icons-small">
+                                    </a>
+                                    <a href="{{ path('blog_delete', {'id': article.id}) }}" class="col-4 btn btn-danger" onclick="return confirm(`Etes-vous sur de vouloir supprimer cet article ?`)">
+                                        <img src="/images/delete.png" alt="" class="icons-small">
+                                    </a>
                                 {% endif %}
                             </div>
                         </div>
@@ -36,11 +45,6 @@
                 {% endfor %}
             </div>
         </section>
-        <div class="col-2"></div>
-    </div>
-
-    <div class="test">
-        2eme branche
     </div>
     
 {% endblock %}

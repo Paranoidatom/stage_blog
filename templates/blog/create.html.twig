@@ -33,7 +33,9 @@
             {{ form_row(formArticle.content, {'label': 'Contenu de l\'article', 'attr' : {'placeholder': "Contenu de l'article"}}) }}
         </div>
         <div class="col-5">
-            {{ form_row(formArticle.day, {'label': 'Jour (ex : Lundi 21 Octobre)', 'attr' : {'placeholder': "Jour"}}) }}
+        
+            {{ form_row(formArticle.date) }}
+            
             {{ form_row(formArticle.done, {'label': 'Validation (0 : non validé, 1 : validé)', 'attr' : {'placeholder': "Fini ?"}}) }}
         </div>
         <div class="col-5">

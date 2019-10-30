@@ -46,14 +46,20 @@ class Article
     private $brochureFilename;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $day;
-
-    /**
      * @ORM\Column(type="integer")
      */
     private $done;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="articles")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $author;
+
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $date;
 
     public function getId(): ?int
     {
@@ -120,17 +126,6 @@ class Article
         return $this;
     }
 
-    public function getDay(): ?string
-    {
-        return $this->day;
-    }
-
-    public function setDay(string $day): self
-    {
-        $this->day = $day;
-
-        return $this;
-    }
     public function getDone(): ?int
     {
         return $this->done;
@@ -139,6 +134,30 @@ class Article
     public function setDone(int $done): self
     {
         $this->done = $done;
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    public function getDate(): ?\DateTimeInterface
+    {
+        return $this->date;
+    }
+
+    public function setDate(?\DateTimeInterface $date): self
+    {
+        $this->date = $date;
 
         return $this;
     }
