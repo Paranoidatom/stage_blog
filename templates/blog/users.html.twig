@@ -7,10 +7,9 @@
     <div class="row">
         {% for user in users %}
             <div class="card-grid col-md-2 m-3">
-
-                <div class="front row align-items-end">
-                    <img src="/uploads/brochures/smile_logo.png" alt="" width="100%">
-                    <div class="font-weight-bold" style="font-size: 15px; color: white;">{{ user.username }}</div>
+                <div class="front row">
+                    <img src="/images/avatars/{{ user.avatar }}" alt="" height="90%" class="avatar avatar-middle pt-2">
+                    <div class="col-12 font-weight-bold" style="display: flex; justify-content: center; font-size: 15px; color: white; letter-spacing: 3px;">{{ user.username }}</div>
                 </div>
 
                 <div class="card_back back align-items-center card_border" style="background-color: white; color: black;">

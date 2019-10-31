@@ -48,14 +48,23 @@
             
         
     </div>
-
-    <button type="submit" class="btn btn-light">
-        {% if editMode %}
-            Enregistrer
-        {% else %}
-            Ajouter un article
-        {% endif %}
-    </button>
+        <div class="col-12">
+            <div class="row mb-3 border-top pt-3">
+                <div class="col-1">
+                    <button type="submit" class="btn btn-success">
+                        {% if editMode %}
+                            Enregistrer
+                        {% else %}
+                            Ajouter un article
+                        {% endif %}
+                    </button>
+                </div>
+                <div class="col-10 h-5"></div>
+                <div class="col-1 d-flex justify-content-center align-items-center">
+                    <a href="{{ path('blog') }}" class="btn btn-outline-primary">Retour</a>
+                </div>
+            </div>
+        </div>
     {{ form_end(formArticle) }}
-    <a href="{{ path('blog') }}" class="btn btn-outline-primary mt-5 h-50">Retour</a>
+    
 {% endblock %}

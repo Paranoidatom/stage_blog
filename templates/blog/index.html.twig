@@ -9,14 +9,14 @@
 {% endblock %}
 
 {% block body %}
-    <div class="container">
+    <!--<div class="container">-->
         <section class="col-md-12 articles mt-5">
             {% if user == app.user %}
-                <h2 class="col-12">Mon blog</strong></h2>
+                <h2 class="col-12 mb-3">Mon blog</strong></h2>
             {% else %}
-                <h2 class="col-12">Blog de <strong>{{ user.username }}</strong></h2>
+                <h2 class="col-12 mb-3">Blog de <strong>{{ user.username }}</strong></h2>
             {% endif %}
-            <div class="row">
+            <div class="row justify-content-center">
                 {% for article in articles %}
                     <div class="card-grid col-md-2 m-3">
                         <div class="front row align-items-end {% if article.done == 0 %} card_border_not_valid {% else %} card_border_valid {% endif %}">
@@ -45,7 +45,7 @@
                 {% endfor %}
             </div>
         </section>
-    </div>
+    <!--</div>-->
     
 {% endblock %}
 

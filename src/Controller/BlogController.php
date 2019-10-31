@@ -7,6 +7,7 @@ use App\Entity\Article;
 use App\Form\ArticleType;
 use App\Repository\UserRepository;
 use App\Repository\ArticleRepository;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,6 +22,13 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class BlogController extends AbstractController
 {
+
+    private $kernelRoot;
+
+    public function __construct(string $kernelRoot){
+        $this->kernelRoot = $kernelRoot;
+    }
+
     /** Permet d'afficher un blog
      * 
      * @Route("/blog", name="blog")
@@ -33,6 +41,7 @@ class BlogController extends AbstractController
             ['author' => $user->getId()],
             ['date' => 'ASC']
         );
+
         return $this->render('blog/index.html.twig', [
             'articles' => $articles,
             'user' => $user
@@ -60,7 +69,6 @@ class BlogController extends AbstractController
      */
     public function home() {
         $date = new \DateTime('2019-10-21');
-        dump($date->format("l"));
         return $this->render('blog/home.html.twig');
     }
 
@@ -77,6 +85,10 @@ class BlogController extends AbstractController
                 $article = new Article();
             }
 
+            if($article) {
+                $existingImage = $article->getBrochureFilename();
+            }
+
             $form = $this->createForm(ArticleType::class, $article);
             $user = $this->getUser();
             $form->handleRequest($request);
@@ -87,7 +99,6 @@ class BlogController extends AbstractController
 
                 if($brochureFile) {
                     $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
-                    //$safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
                     $newFilename = $originalFilename.'-'.uniqid().'.'.$brochureFile->guessExtension();
 
                     $brochureFile->move(
@@ -95,6 +106,12 @@ class BlogController extends AbstractController
                         $newFilename
                     );
                     
+                    if($existingImage != "smile_logo.png") {
+                        $filesystem = new Filesystem();
+                        $path = $this->kernelRoot.'/public/uploads/brochures/'.$existingImage;
+                        $filesystem->remove($path);
+                    }
+
                     $article->setBrochureFilename($newFilename);
                 }
 

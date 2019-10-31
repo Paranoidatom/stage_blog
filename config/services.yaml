@@ -30,3 +30,8 @@ services:
         class: Twig_Extensions_Extension_Intl
         tags:
             - { name: twig.extension }
+
+    App\Controller\BlogController:
+        arguments:
+            - '%kernel.project_dir%'
+        tags: [controller.service_arguments]

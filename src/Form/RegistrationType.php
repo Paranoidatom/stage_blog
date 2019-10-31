@@ -18,16 +18,18 @@ class RegistrationType extends AbstractType
             ->add('username')
             ->add('password', PasswordType::class)
             ->add('confirm_password', PasswordType::class)
-            /*->add('role', ChoiceType::class, [
-                'placeholder' => 'Choisissez une option',
-                'choices' => [
-                    'Utilisateur simple' => 'ROLE_USER',
-                    'Admin' => 'ROLE_ADMIN',
-                ],
+            ->add('avatar', ChoiceType::class, [
+                'label' => 'Avatar',
+                'placeholder' => 'Choisissez un avatar',
+                'choices' => $options['label'],
+                'choice_label' => function() { return false; },
                 'expanded' => true,
-                'multiple' => false
-            ])*/
+                'multiple' => false,
+                
+            ])
         ;
+
+        
     }
 
     public function configureOptions(OptionsResolver $resolver)

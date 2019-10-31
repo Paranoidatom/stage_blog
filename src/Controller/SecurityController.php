@@ -22,8 +22,22 @@ class SecurityController extends AbstractController
     {
         $user = new User();
 
-        $form = $this->createForm(RegistrationType::class, $user);
-
+        $nameDir = '/home/belai/workplace/projetTest/public/images/avatars/';
+        $dir = opendir($nameDir) or die('Erreur : ce répertoire n\existe pas');
+        $files = array();
+        $i=0;
+        while($element = readdir($dir)) {
+            if($element != '/home/belai/workplace/projetTest/public/images/avatars/') {
+                if(!is_dir($nameDir.'/'.$element)) {
+                    $files[$element] = $element;
+                }
+            }
+        }
+        closedir($dir);
+        dump($files);
+        $option['label'] = $files;
+        dump($option);
+        $form = $this->createForm(RegistrationType::class, $user, $option);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
@@ -54,7 +68,8 @@ class SecurityController extends AbstractController
         }
 
         return $this->render('security/registration.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            
         ]);
     }
 

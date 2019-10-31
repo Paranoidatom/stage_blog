@@ -32,8 +32,18 @@
             }
         }) 
     }}
+    
+    {{ form_label(form.avatar) }}
+    <div class="row">
+        {% for avatar in form['avatar'] %}
+            <div class="col-1 align-items-center">
+                {{ form_row(avatar) }}
+                <img src="/images/avatars/{{ avatar.vars.value }}" alt="" height="100%" class="avatar avatar-mini">
+            </div>
+        {% endfor %}
+    </div>
 
-    <button type="submit" class="btn btn-success">Inscription</button>
+    <button type="submit" class="btn btn-success mt-5 mb-3">Inscription</button>
 
     {{ form_end(form) }}
 

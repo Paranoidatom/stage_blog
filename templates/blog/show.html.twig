@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="col-12">
+    <div class="col-12 mt-3">
         {% if app.user is not null %}
             {% for role in app.user.roles if role == 'ROLE_ADMIN' %}
                 <a href="{{ path('blog_edit', {'id': article.id}) }}" class="btn btn-outline-primary h-50">Modifier</a>
